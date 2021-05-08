@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %} Sign Up {% endblock %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block content %}
+<main id="main" data-aos="fade-in">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="container">
+        <h2>Register with us</h2>
+        <p>Register an account to tell us about your favourite cafes, comment and help out other digital nomads!</p>
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Trainers Section ======= -->
+    <section id="trainers" class="trainers row align-items-center justify-content-center">
+      <div class="col-4">
+        {{ register_form.csrf_token() }}
+        {{ wtf.quick_form(register_form, button_map={'register_submit':'btn get-started-btn'}) }}
+
+
+
+      </div>
+
+    </section><!-- End Trainers Section -->
+
+  </main><!-- End #main -->
+
+{% endblock %}

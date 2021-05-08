@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %} Sign Up {% endblock %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block content %}
+<main id="main" data-aos="fade-in">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="container">
+        <h2>Login</h2>
+        <p>Login to comment and on your favourite cafes or tell us about new ones!</p>
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Trainers Section ======= -->
+    <section id="trainers" class="trainers row align-items-center justify-content-center">
+      <div class="col-4">
+          {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+        {{ login_form.csrf_token() }}
+        {{ wtf.quick_form(login_form, button_map={'register_submit':'btn get-started-btn search-btn'}) }}
+
+
+
+      </div>
+
+    </section><!-- End Trainers Section -->
+
+  </main><!-- End #main -->
+
+{% endblock %}

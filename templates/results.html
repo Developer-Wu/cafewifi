@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block title %} Search Results {% endblock %}
+{% block content %}
+ <main id="main" data-aos="fade-in">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="container">
+        <h2>{{heading}}</h2>
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Courses Section ======= -->
+    <section id="courses" class="courses">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+
+<!--          start course item-->
+          {% for result in results %}
+          <div class="col-lg-4 col-md-6 d-flex align-items-stretch">
+            <div class="course-item">
+              <img src="{{result.img_url}}" class="img-fluid" alt="...">
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                  <h4>{{result.location}}</h4>
+                  <p class="price"></p>
+                </div>
+
+                <h3><a href="{{url_for('cafe_detail',cafe_id=result.id)}}">{{result.name}}</a></h3>
+                <p>Et architecto provident deleniti facere repellat nobis iste. Id facere quia quae dolores dolorem tempore.</p>
+                <div class="trainer d-flex justify-content-between align-items-center">
+                  <div class="trainer-profile d-flex align-items-center">
+                    <img src="{{ result.post_author.email | gravatar }}" class="img-fluid" alt="">
+                    <span>{{result.post_author.name}}</span>
+                  </div>
+                  <div class="trainer-rank d-flex align-items-center">
+                    <i class="bx bx-user"></i>&nbsp;{{ result.comment_id | length }}
+                    &nbsp;&nbsp;
+                    <i class="bx bx-heart"></i>&nbsp;{{ result.likes }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> <!-- End Course Item-->
+          {% endfor %}
+
+
+        </div>
+
+      </div>
+    </section><!-- End Courses Section -->
+
+  </main><!-- End #main -->
+{% endblock %}

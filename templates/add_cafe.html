@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block title %} Search Results {% endblock %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% block content %}
+
+ <main id="main" data-aos="fade-in">
+
+    <!-- ======= Breadcrumbs ======= -->
+    <div class="breadcrumbs">
+      <div class="container">
+        <h2>Share with us your favourite cafe!</h2>
+          <h5>Help other digital nomads by sharing your best productivity spots!</h5>
+
+      </div>
+    </div><!-- End Breadcrumbs -->
+
+    <!-- ======= Courses Section ======= -->
+    <section id="courses" class="courses">
+      <div class="container" data-aos="fade-up">
+
+        <div class="row" data-aos="zoom-in" data-aos-delay="100">
+            {{ form.csrf_token() }}
+            {{ wtf.quick_form(form, button_map={'add_cafe_btn':'btn get-started-btn search-btn'}, novalidate=True) }}
+
+
+
+
+        </div>
+
+      </div>
+    </section><!-- End Courses Section -->
+
+  </main><!-- End #main -->
+{% endblock %}
