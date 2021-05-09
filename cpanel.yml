@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home4/thebrpy1/cafewifi
+    - export DEPLOYPATH=/home4/thebrpy1/repositories/cafewifi
     - /bin/cp -R * $DEPLOYPATH
