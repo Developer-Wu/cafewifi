@@ -3,3 +3,4 @@ Werkzeug~=1.0.1
 SQLAlchemy~=1.4.13
 WTForms~=2.3.3
 cloudinary~=1.25.0
+flask_sqlalchemy=2.5.1
