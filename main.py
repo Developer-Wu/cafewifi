@@ -9,6 +9,8 @@ from image_uploader import Uploader
 from sqlalchemy.orm import relationship
 from flask_gravatar import Gravatar
 import datetime as dt
+import sys
+print(sys.version_info)
 
 
 #FLASK
