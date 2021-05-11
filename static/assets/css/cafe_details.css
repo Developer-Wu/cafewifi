@@ -1,0 +1,30 @@
+.commentList {
+text-decoration: None;
+list-style: None;
+}
+
+.commentList li {
+padding-bottom: 30px;
+}
+
+.commenterImage {
+padding: 0 30px 0 0;
+}
+
+.commentActions {
+width: 80px;
+
+}
+
+.reply-form {
+width: 100%;
+display: None;
+}
+
+.reply_text {
+width: 100%;
+}
+
+.commentText{
+width: 70%;
+}

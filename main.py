@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
-from forms import LocationForm, AddCafeForm, RegisterForm, LoginForm
+from forms import LocationForm, AddCafeForm, RegisterForm, LoginForm, CommentForm, ReplyForm
 from flask_bootstrap import Bootstrap
 from itertools import groupby
 from flask_login import LoginManager, login_user, current_user, UserMixin, logout_user,login_required
@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from image_uploader import Uploader
 from sqlalchemy.orm import relationship
 from flask_gravatar import Gravatar
+import datetime as dt
 
 
 #FLASK
@@ -26,7 +27,7 @@ bootstrap = Bootstrap(app)
 
 #GRAVATAR
 gravatar = Gravatar(app,
-                    size=100,
+                    size=50,
                     rating='g',
                     default='retro',
                     force_default=False,
@@ -59,6 +60,7 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(250))
     email = db.Column(db.String(250), unique=True)
 
+    replies = relationship("Reply", back_populates="reply_author")
     comments = relationship("Comment", back_populates="comment_author")
     cafe = relationship("Cafe", back_populates="post_author")
 
@@ -69,6 +71,19 @@ class Comment(db.Model):
     cafe = relationship("Cafe", back_populates="comment_id")
     cafe_id = db.Column(db.Integer, db.ForeignKey('cafe.id'))
     comment_author = relationship("User", back_populates="comments")
+    date = db.Column(db.String(250))
+
+    reply_id = relationship("Reply", back_populates="comment")
+
+class Reply(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(250))
+    reply_author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    reply_author = relationship("User", back_populates="replies")
+    date = db.Column(db.String(250))
+
+    comment = relationship("Comment", back_populates="reply_id")
+    comment_id = db.Column(db.Integer, db.ForeignKey('comment.id'))
 
 db.create_all()
 
@@ -212,11 +227,50 @@ def add_cafe():
     return render_template('add_cafe.html', form=add_cafe_form)
 
 # CAFE DETAILS
-@app.route('/cafe_details/<cafe_id>')
+@app.route('/cafe_details/<cafe_id>', methods = ["GET","POST"])
 def cafe_detail(cafe_id):
     cafe = Cafe.query.filter_by(id=cafe_id).first()
+    comment_form = CommentForm()
+    reply_form = ReplyForm()
+    all_comments = Comment.query.filter_by(cafe_id=cafe_id).all()
+    user = User.query.filter_by(id=current_user.id).first()
+    replies = Reply.query.all()
+    if request.method == 'POST':
+        if comment_form.validate_on_submit():
+            print('hi')
+            date = dt.datetime.now()
+            date_string = date.strftime('%d-%m-%Y')
+            text= comment_form.text.data
 
-    return render_template('cafe_details.html', cafe=cafe)
+            comment = Comment(comment_author = user,
+                              date=date_string,
+                              cafe=cafe,
+                              text=text)
+            db.session.add(comment)
+            db.session.commit()
+
+        elif reply_form.validate_on_submit():
+            comment_id = request.args.get('comment_id')
+            comment = Comment.query.filter_by(id=comment_id).first()
+            print(comment)
+            date = dt.datetime.now()
+            date_string = date.strftime('%d-%m-%Y')
+            text = reply_form.reply_text.data
+            reply = Reply(reply_author=user,
+                              date=date_string,
+                              comment= comment,
+                              text=text)
+            db.session.add(reply)
+            db.session.commit()
+
+
+        return redirect(url_for('cafe_detail', cafe_id=cafe_id))
+
+    return render_template('cafe_details.html', cafe=cafe,
+                           comment_form=comment_form,
+                           comments=all_comments,
+                           reply_form=reply_form,
+                           replies = replies)
 
 if __name__ == '__main__':
     app.run(debug=True)

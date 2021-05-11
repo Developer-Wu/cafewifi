@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}Good Cafes and Wifi{% endblock %}
 {% import 'bootstrap/wtf.html' as wtf %}
+{% block css %} <link href="../static/assets/css/cafe_details.css" rel="stylesheet"> {% endblock %}
 {% block content %}
+
 
   <main id="main">
 
@@ -61,17 +63,56 @@
         <!--           Comments Area -->
         <h2>Comments</h2>
               <ul class="commentList">
-                <li>
+                {% for comment in comments: %}
+                <li class=" comment-item d-flex flex-row">
                     <div class="commenterImage">
-                      <img src="">
+                      <img src="{{ comment.comment_author.email | gravatar }}">
                     </div>
                     <div class="commentText">
-                      <p>asd,adlamdas</p>
-                      <span class="date sub-text">asdkasdkalsmdas</span>
+                      <span class="date sub-text">{{comment.comment_author.name}} on {{comment.date}}</span>
+                      <p>{{comment.text}}</p>
+                       <div class="commentActions d-flex flex-row justify-content-between">
+                      <a href="">Like</a>
+                         <a href="">Reply</a>
+
+                    </div>
+                      <!--                         REPLIES-->
+                         <ul>
+                           {% for reply in replies %}
+                           {% if reply.comment_id == comment.id: %}
+                           <li class=" d-flex flex-row">
+                    <div class="commenterImage">
+                      <img src="{{ reply.reply_author.email | gravatar }}">
+                    </div>
+                    <div class="commentText">
+                      <span class="date sub-text">{{reply.reply_author.name}} on {{reply.date}}</span>
+                      <p>{{reply.text}}</p>
+                       <div class="commentActions d-flex flex-row justify-content-between">
+                      <a href="">Like</a>
+                         <a id="reply{{comment.id}}">Reply</a>
+
+                    </div>
+
                     </div>
                 </li>
+                           {% endif %}
+                           {% endfor %}
+                         </ul>
+                         <!--                           REPLIES-->
+                      <form class="reply-form flex-column justify-content-start align-items-start" action="{{ url_for('cafe_detail', comment_id = comment.id, cafe_id=comment.cafe_id) }}" method="post">
+                        {{ reply_form.csrf_token() }}
+                        {{ reply_form.reply_text(class_="reply_text")}}
+                        {{reply_form.reply_btn(class_="reply_btn btn get-started-btn search-btn")}}
+                      </form>
+
+                    </div>
+                </li>
+                {% endfor %}
+                {{ comment_form.csrf_token() }}
+          {{ wtf.quick_form(comment_form, button_map={'post_btn':'btn get-started-btn search-btn'}, novalidate=True) }}
 
               </ul>
+
 
 
 

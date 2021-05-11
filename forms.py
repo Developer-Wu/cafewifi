@@ -47,9 +47,9 @@ class LoginForm(FlaskForm):
     register_submit = SubmitField('Login')
 
 class CommentForm(FlaskForm):
-    name = StringField('Name', [required()])
     text = CKEditorField('Comment',[required()])
-    post_btn = SubmitField('Register')
+    post_btn = SubmitField('Post')
 
-
-
+class ReplyForm(FlaskForm):
+    reply_text = CKEditorField('', [required()])
+    reply_btn = SubmitField('Reply')
