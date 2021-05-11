@@ -167,7 +167,7 @@ def logout():
 def location_search():
     # Search for all cafes by location
     location = request.args['location']
-
+    heading = f'Cafes in {request.args["location"]}'
     cafes = Cafe.query.filter_by(location=location).all()
 
     return render_template('results.html', results= cafes, heading=heading)
