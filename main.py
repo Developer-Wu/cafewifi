@@ -13,9 +13,10 @@ import datetime as dt
 from comments import Comments
 import requests
 from flask_googlemaps import GoogleMaps, Map
+import os
 
 # MAPS API KEY
-GOOGLE_KEY = 'AIzaSyCsyXXUNMfYIOq_yIoBINLulrbU_7aGEYU'
+GOOGLE_KEY = os.environ['GOOGLE_KEY']
 
 #FLASK
 app = Flask(__name__)
@@ -251,7 +252,7 @@ def cafe_detail(cafe_id):
 
     ###### GET LAT LONG OF
     map_params = {'query':cafe.map_url, 'country':'HK'}
-    map_headers = {'Authorization':'prj_live_sk_e0fe049e370150f5a0582d14cc6ddb4028d0322e'}
+    map_headers = {'Authorization':os.environ['MAP_AUTH']}
     map_data = requests.get('https://api.radar.io/v1/geocode/forward', params=map_params,headers= map_headers)
     lat = map_data.json()['addresses'][0]['latitude']
     long = map_data.json()['addresses'][0]['longitude']
