@@ -146,6 +146,14 @@ h1, h2, h3, h4, h5, h6 {
   max-height: 40px;
 }
 
+.commentList {
+padding-left: 0;}
+
+.ckeditor {
+margin-top: 20px;
+height: 200px;
+}
+
 /**
 * Get Startet Button 
 */

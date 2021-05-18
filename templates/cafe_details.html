@@ -1,17 +1,18 @@
 {% extends 'base.html' %}
 {% block title %}Good Cafes and Wifi{% endblock %}
 {% import 'bootstrap/wtf.html' as wtf %}
-{% block css %} <link href="../static/assets/css/cafe_details.css" rel="stylesheet"> {% endblock %}
+
+
+{% block css %}
+<link href="../static/assets/css/cafe_details.css" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-
-
-  <main id="main">
-
+<main id="main">
     <!-- ======= Breadcrumbs ======= -->
     <div class="breadcrumbs" data-aos="fade-in">
       <div class="container">
         <h2>{{cafe.name}}</h2>
-        <p>Est dolorum ut non facere possimus quibusdam eligendi voluptatem. Quia id aut similique quia voluptas sit quaerat debitis. Rerum omnis ipsam aperiam consequatur laboriosam nemo harum praesentium. </p>
       </div>
     </div><!-- End Breadcrumbs -->
 
@@ -22,18 +23,16 @@
         <div class="row">
           <div class="col-lg-8">
             <img src="{{cafe.img_url}}" class="img-fluid" alt="">
-            <h3>Et enim incidunt fuga tempora</h3>
+            <h3>Description</h3>
             <p>
-              Qui et explicabo voluptatem et ab qui vero et voluptas. Sint voluptates temporibus quam autem. Atque nostrum voluptatum laudantium a doloremque enim et ut dicta. Nostrum ducimus est iure minima totam doloribus nisi ullam deserunt. Corporis aut officiis sit nihil est. Labore aut sapiente aperiam.
-              Qui voluptas qui vero ipsum ea voluptatem. Omnis et est. Voluptatem officia voluptatem adipisci et iusto provident doloremque consequatur. Quia et porro est. Et qui corrupti laudantium ipsa.
-              Eum quasi saepe aperiam qui delectus quaerat in. Vitae mollitia ipsa quam. Ipsa aut qui numquam eum iste est dolorum. Rem voluptas ut sit ut.
+              {{cafe.description}}
             </p>
           </div>
           <div class="col-lg-4">
 
             <div class="course-info d-flex justify-content-between align-items-center">
               <h5>Submitted By</h5>
-              <p><a href="#">Walter White</a></p>
+              <p><a href="#">{{cafe.post_author.name}}</a></p>
             </div>
 
             <div class="course-info d-flex justify-content-between align-items-center">
@@ -42,14 +41,47 @@
             </div>
 
             <div class="course-info d-flex justify-content-between align-items-center">
-              <h5>Available Seats</h5>
-              <p>30</p>
+              <h5>Seats</h5>
+              <p>{{cafe.seats}}</p>
             </div>
 
             <div class="course-info d-flex justify-content-between align-items-center">
-              <h5>Schedule</h5>
-              <p>5.00 pm - 7.00 pm</p>
+              <h5>Opening Hours</h5>
+              <p>{{cafe.opening_time}}</p>
             </div>
+            <div class="course-info d-flex justify-content-between align-items-center">
+              <h5>Details</h5>
+                <p style="text-align: right;">
+              {% if cafe.can_take_calls:%}
+                Can Take Calls<br>
+
+                {% else: %}
+                Can't Take calls<br>
+                {% endif %}
+                {% if cafe.has_wifi:%}
+                It has Wifi<br>
+                {% else: %}
+                It doesn't have Wifi<br>
+                {% endif %}
+                {% if cafe.has_toilets: %}
+                It has toilets<br>
+                {% else: %}
+                It does not have toilets<br>
+                {% endif %}
+                {% if cafe.has_sockets: %}
+                It has power sockets<br>
+                {% else: %}
+                It does not have power sockets<br>
+                {% endif %}
+
+
+            </div>
+            <div class="course-info d-flex justify-content-between align-items-center">
+              <h5 class="me-3">Address</h5>
+              <p style="text-align: right;">{{cafe.map_url}}</p>
+            </div>
+            {{cafe_map.html}}{{cafe_map.js}}
+
 
           </div>
         </div>
@@ -72,50 +104,54 @@
                       <span class="date sub-text">{{comment.comment_author.name}} on {{comment.date}}</span>
                       <p>{{comment.text}}</p>
                        <div class="commentActions d-flex flex-row justify-content-between">
-                      <a href="">Like</a>
-                         <a href="">Reply</a>
+                      <a href="{{url_for('like_comment',comment_id=comment.id, cafe_id=cafe.id)}}">Like</a><p>{{comment.likes}}</p>
+<!--                         <a href="">Reply</a>-->
 
                     </div>
                       <!--                         REPLIES-->
-                         <ul>
-                           {% for reply in replies %}
-                           {% if reply.comment_id == comment.id: %}
-                           <li class=" d-flex flex-row">
-                    <div class="commenterImage">
-                      <img src="{{ reply.reply_author.email | gravatar }}">
-                    </div>
-                    <div class="commentText">
-                      <span class="date sub-text">{{reply.reply_author.name}} on {{reply.date}}</span>
-                      <p>{{reply.text}}</p>
-                       <div class="commentActions d-flex flex-row justify-content-between">
-                      <a href="">Like</a>
-                         <a id="reply{{comment.id}}">Reply</a>
+<!--                         <ul>-->
+<!--                           {% for reply in replies %}-->
+<!--                           {% if reply.comment_id == comment.id: %}-->
+<!--                           <li class=" d-flex flex-row">-->
+<!--                    <div class="commenterImage">-->
+<!--                      <img src="{{ reply.reply_author.email | gravatar }}">-->
+<!--                    </div>-->
+<!--                    <div class="commentText">-->
+<!--                      <span class="date sub-text">{{reply.reply_author.name}} on {{reply.date}}</span>-->
+<!--                      <p>{{reply.text}}</p>-->
+<!--                       <div class="commentActions d-flex flex-row justify-content-between">-->
+<!--                      <a href="">Like</a>-->
+<!--&lt;!&ndash;                         <a id="reply{{comment.id}}">Reply</a>&ndash;&gt;-->
 
-                    </div>
+<!--                    </div>-->
 
-                    </div>
-                </li>
-                           {% endif %}
-                           {% endfor %}
-                         </ul>
+<!--                    </div>-->
+<!--                </li>-->
+<!--                           {% endif %}-->
+<!--                           {% endfor %}-->
+<!--                         </ul>-->
                          <!--                           REPLIES-->
-                      <form class="reply-form flex-column justify-content-start align-items-start" action="{{ url_for('cafe_detail', comment_id = comment.id, cafe_id=comment.cafe_id) }}" method="post">
-                        {{ reply_form.csrf_token() }}
-                        {{ reply_form.reply_text(class_="reply_text")}}
-                        {{reply_form.reply_btn(class_="reply_btn btn get-started-btn search-btn")}}
-                      </form>
+<!--                      <form class="reply-form flex-column justify-content-start align-items-start" action="{{ url_for('cafe_detail', comment_id = comment.id, cafe_id=comment.cafe_id) }}" method="post">-->
+<!--                        {{ reply_form.csrf_token() }}-->
+<!--                        {{ reply_form.reply_text(class_="reply_text")}}-->
+<!--                        {{reply_form.reply_btn(class_="reply_btn btn get-started-btn search-btn")}}-->
+<!--                      </form>-->
 
                     </div>
                 </li>
                 {% endfor %}
-                {{ comment_form.csrf_token() }}
+                         {{ comment_form.csrf_token() }}
           {{ wtf.quick_form(comment_form, button_map={'post_btn':'btn get-started-btn search-btn'}, novalidate=True) }}
-
+                  {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class=flashes>
+                {% for message in messages %}
+                  <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
               </ul>
-
-
-
-
       </div>
     </section><!-- End Course Details Tabs Section -->
 
