@@ -20,7 +20,7 @@ GOOGLE_KEY = os.environ['GOOGLE_KEY']
 
 #FLASK
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data/cafes.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///data/cafes.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.environ['APP_SECRET']
 app.config['GOOGLEMAPS_KEY'] = GOOGLE_KEY
